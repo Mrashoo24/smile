@@ -1,5 +1,6 @@
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:get/get.dart';
 import 'package:get/get_connect/connect.dart';
@@ -129,4 +130,46 @@ class ApiClient extends GetConnect {
       rethrow;
     }
   }
+
+
+  Future<String?> uploadImage(File image) async {
+
+    // Replace 'YOUR_API_ENDPOINT' with the actual API endpoint URL
+    var apiUrl = Uri.parse( 'https://smilecouriers.com.au/book/Image/upload');
+
+    // Create a multipart request
+    var request = http.MultipartRequest('POST', apiUrl);
+
+    // Add the image file to the request
+    request.files.add(await http.MultipartFile.fromPath('userfile', image.path));
+
+    try {
+      // Send the request
+      var response = await request.send();
+
+      if (response.statusCode == 200) {
+        // Request was successful, do something with the response
+        print('Image uploaded successfully');
+
+         var responseBody = await response.stream.bytesToString();
+        print(responseBody);
+        if(responseBody.contains("image_url")){
+
+
+          return jsonDecode(responseBody)["image_url"];
+        }else{
+          return null;
+        }
+      } else {
+        // Request failed
+        print('Failed to upload image. Status code: ${response.statusCode}');
+        return null;
+      }
+    } catch (error) {
+      print('Error uploading image: $error');
+      return null;
+    }
+
+  }
+
 }
