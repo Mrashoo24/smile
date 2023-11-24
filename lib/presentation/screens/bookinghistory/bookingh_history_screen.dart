@@ -28,7 +28,7 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-
+       await controller.getBookings();
       },
       child: Scaffold(
         key: _scaffoldKey,
