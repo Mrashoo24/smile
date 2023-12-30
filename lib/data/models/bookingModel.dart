@@ -1,3 +1,5 @@
+import '../../presentation/screens/bookinghistory/bookingController.dart';
+
 class BookingModel {
   String? id;
   String? parentCmpnyId;
@@ -17,6 +19,7 @@ class BookingModel {
   String? duetime;
   String? pricing;
   String? driver;
+  LocationModel? location;
 
   BookingModel(
       {this.id,
@@ -60,25 +63,25 @@ class BookingModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['parent_cmpny_id'] = this.parentCmpnyId;
-    data['company_id'] = this.companyId;
-    data['emp_id'] = this.empId;
-    data['to_add_comp_id'] = this.toAddCompId;
-    data['jobcard'] = this.jobcard;
-    data['priority'] = this.priority;
-    data['date'] = this.date;
-    data['timestampp'] = this.timestampp;
-    data['companyname'] = this.companyname;
-    data['notes'] = this.notes;
-    data['status'] = this.status;
-    data['from_address'] = this.fromAddress;
-    data['to_address'] = this.toAddress;
-    data['userid'] = this.userid;
-    data['duetime'] = this.duetime;
-    data['pricing'] = this.pricing;
-    data['driver'] = this.driver;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['parent_cmpny_id'] = parentCmpnyId;
+    data['company_id'] = companyId;
+    data['emp_id'] = empId;
+    data['to_add_comp_id'] = toAddCompId;
+    data['jobcard'] = jobcard;
+    data['priority'] = priority;
+    data['date'] = date;
+    data['timestampp'] = timestampp;
+    data['companyname'] = companyname;
+    data['notes'] = notes;
+    data['status'] = status;
+    data['from_address'] = fromAddress;
+    data['to_address'] = toAddress;
+    data['userid'] = userid;
+    data['duetime'] = duetime;
+    data['pricing'] = pricing;
+    data['driver'] = driver;
     return data;
   }
 }

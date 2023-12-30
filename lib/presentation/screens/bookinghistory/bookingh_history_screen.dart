@@ -1,13 +1,18 @@
-import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smile/data/models/bookingModel.dart';
 import 'package:smile/presentation/screens/authentication/controllers/authcontroller.dart';
 import 'package:smile/presentation/screens/bookinghistory/bookingController.dart';
+import 'package:smile/presentation/screens/notehistory/noteshistory.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../../../core/widgets.dart';
+import '../addbooking/addBookings.dart';
 
 class BookingHistoryPage extends StatefulWidget {
+  const BookingHistoryPage({super.key});
+
   @override
   State<BookingHistoryPage> createState() => _BookingHistoryPageState();
 }
@@ -16,7 +21,7 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
   var controller = Get.put(BookingController());
   var authController = Get.put(AuthController());
 
-  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
   @override
   void initState() {
@@ -34,55 +39,81 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
         key: _scaffoldKey,
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
-          title: Text('Booking History'),
+          title: const Text('Booking History'),
           backgroundColor: Colors.red,
           automaticallyImplyLeading: false,
           leading: InkWell(
               onTap: () {
                 _scaffoldKey.currentState!.openDrawer();
               },
-              child: Icon(Icons.menu)),
+              child: const Icon(Icons.menu)),
         ),
         drawer: SafeArea(
           child: Drawer(
             width: Get.width * 0.4,
             child: Padding(
-              padding: EdgeInsets.only(top: 20.0),
+              padding: const EdgeInsets.only(top: 20.0),
               child: Column(
                 children: [
                   Text(authController.userModel.value!.firstName!,
-                    style: TextStyle(color: Colors.red,
+                    style: const TextStyle(color: Colors.red,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 3),),
-                  SizedBox(height: 20,),
-                  ListTile(title: Text("Logout"), onTap: () {
+                  const SizedBox(height: 20,),
+                  ListTile(title: const Text("Notes"), onTap: () {
+                    Get.to(const NotesHistoryPage());
+                  }, leading: const Icon(Icons.newspaper_outlined)),
+                  const SizedBox(height: 20,),
+                  ListTile(title: const Text("Logout"), onTap: () {
                     authController.logoutUser();
-                  }, leading: Icon(Icons.logout))
+                  }, leading: const Icon(Icons.logout))
+                  , const SizedBox(height: 20,),
+
                 ],
               ),
             ),
           ),
         ),
+        floatingActionButton: FloatingActionButton(
+
+            onPressed: (){
+          Get.to(AddBooking());
+        },
+
+          backgroundColor: Colors.red, // Set the background color to red
+          child: Icon(
+            Icons.add, // Assuming you want to use the "add" icon
+            color: Colors.black, // Set the icon color to black
+          ),
+
+        ),
         body: GetX<BookingController>(
           init: controller,
           builder: (controller) {
-            return controller.loading.value ? Center(
+            return controller.loading.value ? const Center(
               child: CircularProgressIndicator(),) : ListView.builder(
-              itemCount: controller.bookingList.value!.length,
+              itemCount: controller.bookingList.value.length,
               itemBuilder: (context, index) {
-                BookingModel booking = controller.bookingList.value![index];
+                BookingModel booking = controller.bookingList.value[index];
 
                 return Card(
-                  margin: EdgeInsets.all(16.0),
+                  margin: const EdgeInsets.all(16.0),
                   child: ExpansionTile(
-                    title: buildDataText(
-                        context, 'Booking ID', '${booking.id}'),
+                    title: Column(
+                      children: [
+                        buildDataText(
+                            context, 'Booking ID', '${booking.id}'),
+                        buildDataText(
+                            context, 'To Address:', '\n${booking.toAddress}'),
+                        const SizedBox(height: 10,)
+                      ],
+                    ),
                     subtitle: buildDataText(
                         context, 'Booking Type', booking.jobcard),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Container(
+                        SizedBox(
                           width: 120,
                           child: ElevatedButton(
                             onPressed: () {
@@ -95,21 +126,21 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
                                         child: Container(
                                           height: 400,
                                           width: Get.width * 0.7,
-                                          decoration: BoxDecoration(
+                                          decoration: const BoxDecoration(
                                               borderRadius: BorderRadius.all(
                                                   Radius.circular(30))
                                           ),
-                                          padding: EdgeInsets.symmetric(
+                                          padding: const EdgeInsets.symmetric(
                                               vertical: 40, horizontal: 10),
                                           child: SingleChildScrollView(
                                             child: Column(
                                               children: [
-                                                Text("SELECT STATUS",
+                                                const Text("SELECT STATUS",
                                                   style: TextStyle(
                                                       fontWeight: FontWeight
                                                           .bold),),
 
-                                                Text("CAPTURE IMAGE"),
+                                                const Text("CAPTURE IMAGE"),
                                                 Center(
                                                   child: Column(
                                                     mainAxisAlignment: MainAxisAlignment
@@ -117,26 +148,26 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
                                                     children: <Widget>[
                                                       controller.selectedFile
                                                           .value == null
-                                                          ? Text(
+                                                          ? const Text(
                                                           'No image selected.')
                                                           : Image.file(
                                                         controller.selectedFile
                                                             .value!,
                                                         height: 150.0,
                                                       ),
-                                                      SizedBox(height: 20.0),
+                                                      const SizedBox(height: 20.0),
                                                       ElevatedButton(
                                                         onPressed: () {
                                                           controller.getImage();
                                                         },
-                                                        child: Text(
+                                                        child: const Text(
                                                             'Select Image'),
                                                       ),
-                                                      SizedBox(height: 20.0),
+                                                      const SizedBox(height: 20.0),
                                                       TextFormField(
                                                         controller: controller
                                                             .notesController,
-                                                        decoration: InputDecoration(
+                                                        decoration: const InputDecoration(
                                                             enabledBorder: OutlineInputBorder(
                                                                 borderSide: BorderSide(
                                                                     color: Colors
@@ -181,16 +212,25 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
                               // );
                             },
                             style: ElevatedButton.styleFrom(
-                              primary: Colors.red,
-                              onPrimary: Colors.white,
+                              foregroundColor: Colors.white, backgroundColor: Colors.red,
                             ),
                             child: Text(booking.status!,
-                              style: TextStyle(fontSize: 12,),
+                              style: const TextStyle(fontSize: 12,),
                               textAlign: TextAlign.center,),
                           ),
                         ),
-                        SizedBox(width: 4,),
-                        Icon(Icons.location_on)
+                        const SizedBox(width: 4,),
+                        InkWell(
+                          onTap: () async {
+
+                           var curretnLocatiomn =  await controller.getCurrentLocation();
+
+                            if (!await launchUrl(Uri.parse("https://www.google.com/maps/dir/?api=1&origin=${curretnLocatiomn!.latitude},${curretnLocatiomn!.longitude}&destination=${booking.location!.latitude},${booking.location!.longitude}"))) {
+                            throw Exception('Could not launch');
+                            }
+                          },
+
+                            child: const Icon(Icons.location_on))
                       ],
                     ),
                     children: [
@@ -242,36 +282,17 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
       },
       child: Card(
           child: Container(
-            child: Center(child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(title, style: TextStyle(color: Colors.white),),
-            )),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 color: Colors.red
             ),
             width: double.infinity,
+            child: Center(child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(title, style: const TextStyle(color: Colors.white),),
+            )),
           )
       ),
     );
   }
 
-  RichText buildDataText(BuildContext context, key, value) {
-    return RichText(
-      text: TextSpan(
-        style: DefaultTextStyle
-            .of(context)
-            .style,
-        children: <TextSpan>[
-          TextSpan(
-            text: '$key: ',
-            style: TextStyle(
-              color: Colors.red,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          TextSpan(text: value),
-        ],
-      ),
-    );
-  }
 }

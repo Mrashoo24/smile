@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:smile/core/prefutils.dart';
 import 'package:smile/data/apiclient/apimanager.dart';
 import 'package:smile/data/models/userModel.dart';
 import 'package:smile/presentation/screens/authentication/loginscreen.dart';
@@ -31,7 +30,7 @@ class AuthController extends GetxController {
 
 
       loading.value = false;
-      Get.to(BookingHistoryPage());
+      Get.to(const BookingHistoryPage());
     }catch(e){
       loading.value = false;
     }
@@ -44,7 +43,7 @@ class AuthController extends GetxController {
     pref.clear();
     userModel.value = null;
 
-    Get.offAll(LoginScreen());
+    Get.offAll(const LoginScreen());
 
   }
 }
