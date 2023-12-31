@@ -122,6 +122,7 @@ class BookingController extends GetxController {
       final location = Location();
      var  _currentLocation = await location.getLocation();
 
+
      return LocationModel(_currentLocation.latitude!, _currentLocation.longitude!);
 
     } catch (e) {
