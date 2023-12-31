@@ -14,6 +14,11 @@ class AddBooking extends StatelessWidget {
         appBar: AppBar(
           title: Text('Submit Form'),
           automaticallyImplyLeading: true,
+          leading: InkWell(
+              onTap: (){
+                Get.back();
+              },
+              child: Icon(Icons.keyboard_backspace_rounded)),
         ),
         body: MyForm(),
       ),
@@ -97,6 +102,8 @@ class _MyFormState extends State<MyForm> {
       // Divider(thickness: 1),
       // Text("Company Info",style:  TextStyle(color: Colors.black),),
       // Divider(thickness: 1),
+      SizedBox(height: 16),
+
       Builder(
         builder: (context) {
 
@@ -104,12 +111,14 @@ class _MyFormState extends State<MyForm> {
           return _jobCardController.text == "Pick Up" ? _buildMultiSelectDropdown("From Address", allItems,labAddress) :  _buildDropdownField("From Address", _fromAddressController,companyAddress);
         }
       ),
+      SizedBox(height: 16),
       Builder(
         builder: (context) {
 
           return _jobCardController.text == "Pick Up" ?  _buildDropdownField("To Address", _toAddressController,companyAddress) : _buildMultiSelectDropdown("To Address", allItems,labAddress) ;
         }
       ),
+      SizedBox(height: 16),
       _buildTextFieldMulti("Notes", _notesController),
       //
       // _buildTextField("Parent Company ID", _parentCompanyController),
@@ -130,6 +139,7 @@ class _MyFormState extends State<MyForm> {
       // _buildTextField("Driver Note", _driverNoteController),
       SizedBox(height: 16),
       loading ? Center(child: CircularProgressIndicator(),): ElevatedButton(
+        style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
         onPressed: () async {
           if (_formKey.currentState!.validate()) {
            await  Future.forEach(allItems, (element) {
@@ -144,7 +154,7 @@ class _MyFormState extends State<MyForm> {
                 "timestampp":   "${_dateController.text.split(" ")[0]} ${_timestampController.text}",
                 "companyname": _jobCardController.text == "Pick Up" ? _toAddressController.text.split('-//-')[0] : _fromAddressController.text.split('-//-')[0],
                 "notes":_notesController.text,
-                "status":"PICKED UP",
+                "status":"BOOKING APPROVED",
                 "from_address": _jobCardController.text == "Pick Up" ? element.split('-//-')[1] : _toAddressController.text.split('-//-')[1],
                 "to_address":_jobCardController.text == "Pick Up" ?  _toAddressController.text.split('-//-')[1] :element.split('-//-')[1],
                 "userid": "39",
@@ -162,7 +172,7 @@ class _MyFormState extends State<MyForm> {
             // Add your logic to submit the form data
           }
         },
-        child: Text('Submit'),
+        child: Text('Submit',style: TextStyle(color: Colors.white),),
       ),
     ];
   }

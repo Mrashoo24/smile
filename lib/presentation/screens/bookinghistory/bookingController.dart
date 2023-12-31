@@ -78,7 +78,7 @@ class BookingController extends GetxController {
 
 
   Future<LocationModel> geoCodingTest(String address) async {
-    const String googelApiKey = 'AIzaSyA7SNbqpwGDuRLyyskgzI4hmcvsDHjLNU8';
+    const String googelApiKey = 'AIzaSyC2qLMdCcdT2qYnzFJOMNL7ynFv1DwSgEc';
     final bool isDebugMode = true;
     final api = GoogleGeocodingApi(googelApiKey, isLogged: isDebugMode);
 
