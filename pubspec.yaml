@@ -42,7 +42,7 @@ dependencies:
   image_picker: ^1.0.4
 #  google_geocoding_api: ^1.4.1
   location: ^5.0.1
-  url_launcher: ^6.2.2
+  url_launcher:
 
 
 
