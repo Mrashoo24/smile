@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get/get.dart';
 import 'package:smile/core/widgets.dart';
 import 'package:smile/data/models/bookingModel.dart';
@@ -20,7 +21,7 @@ class ApiClient extends GetConnect {
   ///method can be used for checking internet connection
   ///returns [bool] based on availability of internet
   Future isNetworkConnected() async {
-    if (!await Get.find<NetworkInfo>().isConnected()) {
+    if (!await Get.put<NetworkInfo>(NetworkInfo(Connectivity())).isConnected()) {
       throw NoInternetException('No Internet Found!');
     }
   }

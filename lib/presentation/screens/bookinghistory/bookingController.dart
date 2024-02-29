@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_geocoding_api/google_geocoding_api.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
 import 'package:smile/core/widgets.dart';
@@ -68,8 +67,8 @@ class BookingController extends GetxController {
 
 
   locations.sort((a, b) {
-  final distanceA = calculateDistance(targetLocation, a.location!);
-  final distanceB = calculateDistance(targetLocation, b.location!);
+  final distanceA = calculateDistance(targetLocation, a.toLocation!);
+  final distanceB = calculateDistance(targetLocation, b.toLocation!);
   return distanceA.compareTo(distanceB);
   });
 
@@ -77,21 +76,29 @@ class BookingController extends GetxController {
   }
 
 
-  Future<LocationModel> geoCodingTest(String address) async {
-    const String googelApiKey = 'AIzaSyC2qLMdCcdT2qYnzFJOMNL7ynFv1DwSgEc';
-    final bool isDebugMode = true;
-    final api = GoogleGeocodingApi(googelApiKey, isLogged: isDebugMode);
-
-    final searchResults = await api.search(
-      address,
-      language: 'en',
-    );
-
-    print("checkAddress = ${searchResults.results.first.geometry!.location.lat} ${searchResults.results.first.geometry!.location.lng}");
-
-    return LocationModel(searchResults.results.first.geometry!.location.lat, searchResults.results.first.geometry!.location.lng);
-
-  }
+  // Future<LocationModel> geoCodingTest(String address) async {
+  //   const String googelApiKey = 'AIzaSyC2qLMdCcdT2qYnzFJOMNL7ynFv1DwSgEc';
+  //   final bool isDebugMode = true;
+  //   final api = GoogleGeocodingApi(googelApiKey, isLogged: isDebugMode);
+  //
+  //   final searchResults = await api.search(
+  //     address,
+  //     language: 'en',
+  //   );
+  //   if(searchResults.results.isNotEmpty){
+  //
+  //     print("checkAddress = ${searchResults.results.first.geometry!.location.lat} ${searchResults.results.first.geometry!.location.lng}");
+  //
+  //     return LocationModel(searchResults.results.first.geometry!.location.lat, searchResults.results.first.geometry!.location.lng);
+  //
+  //   }else{
+  //
+  //
+  //     return LocationModel(-37.80229992857945, 145.04223167033916);
+  //
+  //   }
+  //
+  // }
 
   Future<void> _requestLocationPermission() async {
     final location = Location();
@@ -137,17 +144,19 @@ class BookingController extends GetxController {
 
       var bookingListValue= await ApiClient().getBookings(headers: {"email":authController.userModel.value!.email!});
 
-      List<BookingModel> bookingList1 = [];
-      Future.forEach(bookingListValue,(element) async {
-        var newValue = element;
-       LocationModel location =  await geoCodingTest(element.toAddress!.replaceAll("-//-", ""));
-        newValue.location = location;
-        bookingList1.add(newValue);
-      });
+      // List<BookingModel> bookingList1 = [];
+      // await Future.forEach(bookingListValue,(element) async {
+      //   var newValue = element;
+      //
+      //  LocationModel location =  await geoCodingTest(element.toAddress!.replaceAll("-//-", ""));
+      //
+      //   newValue.location = location;
+      //   bookingList1.add(newValue);
+      // });
 
       var currentLocation = await getCurrentLocation();
 
-      bookingList.value =   sortLocationsByDistance(bookingList1, currentLocation!);
+      bookingList.value =   sortLocationsByDistance(bookingListValue, currentLocation!);
 
       loading.value = false;
     }catch(e){
@@ -175,6 +184,7 @@ class BookingController extends GetxController {
       showSuccessSnack("Updated","");
       selectedFile.value = null;
       selectedImageURI.value = null;
+      notesController.clear();
     }catch(e){
       Get.back();
       showErrorSnack("Error", e.toString());
@@ -337,11 +347,15 @@ class BookingController extends GetxController {
 
 
   getNotes() async {
-
-    notesloading.value = true;
-        noteList.value = await ApiClient().getNotes(headers: {"id":authController.userModel.value!.id!});
-    notesloading.value = false;
+    try {
+      notesloading.value = true;
+      noteList.value = await ApiClient()
+          .getNotes(headers: {"id": authController.userModel.value!.id!});
+      notesloading.value = false;
+    }catch(e){
+      notesloading.value = false;
     }
+  }
 
 
   }

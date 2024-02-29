@@ -51,117 +51,131 @@ class _NotesHistoryPageState extends State<NotesHistoryPage> {
                 onPressed: () {
                   showDialog(
                       context: context,
+                      barrierDismissible: false,
                       builder: (context) {
-                        return Dialog(
-                          child: GetX<BookingController>(
-                            builder: (controller) {
-                              return SingleChildScrollView(
-                                child: Container(
-                                  height: 400,
-                                  width: Get.width * 0.7,
-                                  decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(30))),
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 40, horizontal: 10),
-                                  child: SingleChildScrollView(
-                                    child: Column(
-                                      children: [
-                                        const Text(
-                                          "SELECT STATUS",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        const Text("CAPTURE IMAGE"),
-                                        Obx(() {
-                                          return Center(
-                                            child: Column(
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                              children: <Widget>[
-                                                controller.selectedFileList
-                                                    .value ==
-                                                    null ||
-                                                    controller.selectedFileList
-                                                        .value!.isEmpty
-                                                    ? const Text('No image selected.')
-                                                    : Wrap(
-                                                  children: controller
-                                                      .selectedFileList.value!
-                                                      .map((data) =>
-                                                      Padding(
-                                                        padding: const EdgeInsets
-                                                            .all(20.0),
-                                                        child: Image.file(
-                                                          data,
-                                                          height: 150.0,
+                        return WillPopScope(
+                          onWillPop: () async{
+                            controller.selectedFileList.value = [];
+                            controller.notesController.clear();
+                            Get.back();
+                            return false;
+                          },
+                          child: Dialog(
+                            child: GetX<BookingController>(
+                              builder: (controller) {
+                                return SingleChildScrollView(
+                                  child: Container(
+                                    height: 400,
+                                    width: Get.width * 0.7,
+                                    decoration: const BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(30))),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 40, horizontal: 10),
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        children: [
+                                          Center(child: IconButton(onPressed: (){
+                                            controller.selectedFileList.value = [];
+                                            controller.notesController.clear();
+                                            Get.back();
+                                          }, icon: Icon(Icons.close)),),
+                                          const Text(
+                                            "SELECT STATUS",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          const Text("CAPTURE IMAGE"),
+                                          Obx(() {
+                                            return Center(
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                                children: <Widget>[
+                                                  controller.selectedFileList
+                                                      .value ==
+                                                      null ||
+                                                      controller.selectedFileList
+                                                          .value!.isEmpty
+                                                      ? const Text('No image selected.')
+                                                      : Wrap(
+                                                    children: controller
+                                                        .selectedFileList.value!
+                                                        .map((data) =>
+                                                        Padding(
+                                                          padding: const EdgeInsets
+                                                              .all(20.0),
+                                                          child: Image.file(
+                                                            data,
+                                                            height: 150.0,
+                                                          ),
+                                                        ),).toList(),
+                                                  ),
+                                                  const SizedBox(height: 20.0),
+                                                  ElevatedButton(
+                                                    onPressed: () {
+                                                      controller.getImageBulk();
+                                                    },
+                                                    child: const Text('Select Image'),
+                                                  ),
+                                                  const SizedBox(height: 20.0),
+                                                  TextFormField(
+                                                    controller:
+                                                    controller.notesController,
+                                                    decoration: const InputDecoration(
+                                                        enabledBorder:
+                                                        OutlineInputBorder(
+                                                            borderSide:
+                                                            BorderSide(
+                                                                color: Colors
+                                                                    .red)),
+                                                        focusedBorder:
+                                                        OutlineInputBorder(
+                                                            borderSide:
+                                                            BorderSide(
+                                                                color: Colors
+                                                                    .red)),
+                                                        label: Text("Notes")),
+                                                  )
+                                                ],
+                                              ),
+                                            );
+                                          }),
+                                          controller.notesloading.value
+                                              ? const Center(
+                                            child:
+                                            CircularProgressIndicator(),
+                                          )
+                                              : InkWell(
+                                            onTap: () {
+                                              controller.updateNotes();
+                                            },
+                                            child: Card(
+                                                child: Container(
+                                                  decoration: const BoxDecoration(
+                                                      color: Colors.red),
+                                                  width: double.infinity,
+                                                  child: const Center(
+                                                      child: Padding(
+                                                        padding:
+                                                        EdgeInsets.all(
+                                                            8.0),
+                                                        child: Text(
+                                                          "Add Notes",
+                                                          style: TextStyle(
+                                                              color: Colors
+                                                                  .white),
                                                         ),
-                                                      ),).toList(),
-                                                ),
-                                                const SizedBox(height: 20.0),
-                                                ElevatedButton(
-                                                  onPressed: () {
-                                                    controller.getImageBulk();
-                                                  },
-                                                  child: const Text('Select Image'),
-                                                ),
-                                                const SizedBox(height: 20.0),
-                                                TextFormField(
-                                                  controller:
-                                                  controller.notesController,
-                                                  decoration: const InputDecoration(
-                                                      enabledBorder:
-                                                      OutlineInputBorder(
-                                                          borderSide:
-                                                          BorderSide(
-                                                              color: Colors
-                                                                  .red)),
-                                                      focusedBorder:
-                                                      OutlineInputBorder(
-                                                          borderSide:
-                                                          BorderSide(
-                                                              color: Colors
-                                                                  .red)),
-                                                      label: Text("Notes")),
-                                                )
-                                              ],
-                                            ),
-                                          );
-                                        }),
-                                        controller.notesloading.value
-                                            ? const Center(
-                                          child:
-                                          CircularProgressIndicator(),
-                                        )
-                                            : InkWell(
-                                          onTap: () {
-                                            controller.updateNotes();
-                                          },
-                                          child: Card(
-                                              child: Container(
-                                                decoration: const BoxDecoration(
-                                                    color: Colors.red),
-                                                width: double.infinity,
-                                                child: const Center(
-                                                    child: Padding(
-                                                      padding:
-                                                      EdgeInsets.all(
-                                                          8.0),
-                                                      child: Text(
-                                                        "Add Notes",
-                                                        style: TextStyle(
-                                                            color: Colors
-                                                                .white),
-                                                      ),
-                                                    )),
-                                              )),
-                                        )
-                                      ],
+                                                      )),
+                                                )),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                              );
-                            },
+                                );
+                              },
+                            ),
                           ),
                         );
                       });

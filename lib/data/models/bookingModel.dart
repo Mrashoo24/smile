@@ -19,7 +19,10 @@ class BookingModel {
   String? duetime;
   String? pricing;
   String? driver;
-  LocationModel? location;
+  String? from_lat ;
+  String?  from_long ;
+  String? to_lat ;
+  String?  to_long ;
 
   BookingModel(
       {this.id,
@@ -60,6 +63,10 @@ class BookingModel {
     duetime = json['duetime'];
     pricing = json['pricing'];
     driver = json['driver'];
+    from_lat = json['from_lat'];
+    from_long = json['from_long'];
+    to_lat = json['to_lat'];
+    to_long = json['to_long'];
   }
 
   Map<String, dynamic> toJson() {
@@ -82,6 +89,27 @@ class BookingModel {
     data['duetime'] = duetime;
     data['pricing'] = pricing;
     data['driver'] = driver;
+
+    data['from_lat'] = from_lat;
+    data['from_long'] = from_long;
+    data['to_lat'] = to_lat;
+    data['to_long'] = to_long;
     return data;
+  }
+
+  // Getter for location using from_lat and from_long
+  LocationModel get locationFrom {
+    return LocationModel(
+       double.parse(from_lat ?? "0"),
+      double.parse(from_long ?? "0"),
+    );
+  }
+
+  // Getter for toLocation using to_lat and to_long
+  LocationModel get toLocation {
+    return LocationModel(
+      double.parse(to_lat ?? "0"),
+      double.parse(to_long ?? "0")
+    );
   }
 }

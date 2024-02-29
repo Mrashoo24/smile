@@ -117,93 +117,110 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
                           width: 120,
                           child: ElevatedButton(
                             onPressed: () {
-                              showDialog(context: context, builder: (context) {
-                                return Dialog(
-                                  child: GetX<BookingController>(
-                                    builder: (controller
-                                        ) {
-                                      return SingleChildScrollView(
-                                        child: Container(
-                                          height: 400,
-                                          width: Get.width * 0.7,
-                                          decoration: const BoxDecoration(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(30))
-                                          ),
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 40, horizontal: 10),
-                                          child: SingleChildScrollView(
-                                            child: Column(
-                                              children: [
-                                                const Text("SELECT STATUS",
-                                                  style: TextStyle(
-                                                      fontWeight: FontWeight
-                                                          .bold),),
+                              showDialog(context: context,
+                                  barrierDismissible: false,
+                                  builder: (context) {
+                                return WillPopScope(
+                                  onWillPop: ()async {
+                                    controller.selectedFile.value = null;
+                                    controller.selectedImageURI.value = null;
+                                    controller.notesController.clear();
+                                    Get.back();
+                                    return false;
+                                  },
+                                  child: Dialog(
+                                    child: GetX<BookingController>(
+                                      builder: (controller
+                                          ) {
+                                        return SingleChildScrollView(
+                                          child: Container(
+                                            height: 400,
+                                            width: Get.width * 0.7,
+                                            decoration: const BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(30))
+                                            ),
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 40, horizontal: 10),
+                                            child: SingleChildScrollView(
+                                              child: Column(
+                                                children: [
+                                                  Center(child: IconButton(onPressed: (){
+                                                    controller.selectedFile.value = null;
+                                                    controller.selectedImageURI.value = null;
+                                                    controller.notesController.clear();
+                                                    Get.back();
+                                                  }, icon: Icon(Icons.close)),),
+                                                  const Text("SELECT STATUS",
+                                                    style: TextStyle(
+                                                        fontWeight: FontWeight
+                                                            .bold),),
 
-                                                const Text("CAPTURE IMAGE"),
-                                                Center(
-                                                  child: Column(
-                                                    mainAxisAlignment: MainAxisAlignment
-                                                        .center,
-                                                    children: <Widget>[
-                                                      controller.selectedFile
-                                                          .value == null
-                                                          ? const Text(
-                                                          'No image selected.')
-                                                          : Image.file(
+                                                  const Text("CAPTURE IMAGE"),
+                                                  Center(
+                                                    child: Column(
+                                                      mainAxisAlignment: MainAxisAlignment
+                                                          .center,
+                                                      children: <Widget>[
                                                         controller.selectedFile
-                                                            .value!,
-                                                        height: 150.0,
-                                                      ),
-                                                      const SizedBox(height: 20.0),
-                                                      ElevatedButton(
-                                                        onPressed: () {
-                                                          controller.getImage();
-                                                        },
-                                                        child: const Text(
-                                                            'Select Image'),
-                                                      ),
-                                                      const SizedBox(height: 20.0),
-                                                      TextFormField(
-                                                        controller: controller
-                                                            .notesController,
-                                                        decoration: const InputDecoration(
-                                                            enabledBorder: OutlineInputBorder(
-                                                                borderSide: BorderSide(
-                                                                    color: Colors
-                                                                        .red)
-                                                            ),
-                                                            focusedBorder: OutlineInputBorder(
-                                                                borderSide: BorderSide(
-                                                                    color: Colors
-                                                                        .red)
-                                                            ),
-                                                            label: Text("Notes")
+                                                            .value == null
+                                                            ? const Text(
+                                                            'No image selected.')
+                                                            : Image.file(
+                                                          controller.selectedFile
+                                                              .value!,
+                                                          height: 150.0,
                                                         ),
+                                                        const SizedBox(height: 20.0),
+                                                        ElevatedButton(
+                                                          onPressed: () {
+                                                            controller.getImage();
+                                                          },
+                                                          child: const Text(
+                                                              'Select Image'),
+                                                        ),
+                                                        const SizedBox(height: 20.0),
+                                                        TextFormField(
+                                                          controller: controller
+                                                              .notesController,
+                                                          decoration: const InputDecoration(
+                                                              enabledBorder: OutlineInputBorder(
+                                                                  borderSide: BorderSide(
+                                                                      color: Colors
+                                                                          .red)
+                                                              ),
+                                                              focusedBorder: OutlineInputBorder(
+                                                                  borderSide: BorderSide(
+                                                                      color: Colors
+                                                                          .red)
+                                                              ),
+                                                              label: Text("Notes")
+                                                          ),
 
-                                                      )
-                                                    ],
+                                                        )
+                                                      ],
+                                                    ),
                                                   ),
-                                                ),
-                                                buildInkWell(
-                                                    "Picked Up", booking),
-                                                buildInkWell(
-                                                    "On The Way", booking),
-                                                buildInkWell(
-                                                    "Successfully Delivered",
-                                                    booking),
-                                                buildInkWell(
-                                                    "Cancelled", booking),
-                                                buildInkWell(
-                                                    "Address not Found",
-                                                    booking),
+                                                  buildInkWell(
+                                                      "Picked Up", booking),
+                                                  buildInkWell(
+                                                      "On The Way", booking),
+                                                  buildInkWell(
+                                                      "Successfully Delivered",
+                                                      booking),
+                                                  buildInkWell(
+                                                      "Cancelled", booking),
+                                                  buildInkWell(
+                                                      "Address not Found",
+                                                      booking),
 
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      );
-                                    },
+                                        );
+                                      },
+                                    ),
                                   ),
                                 );
                               });
@@ -225,7 +242,7 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
 
                            var curretnLocatiomn =  await controller.getCurrentLocation();
 
-                            if (!await launchUrl(Uri.parse("https://www.google.com/maps/dir/?api=1&origin=${curretnLocatiomn!.latitude},${curretnLocatiomn!.longitude}&destination=${booking.location!.latitude},${booking.location!.longitude}"))) {
+                            if (!await launchUrl(Uri.parse("https://www.google.com/maps/dir/?api=1&origin=${curretnLocatiomn!.latitude},${curretnLocatiomn!.longitude}&destination=${booking.locationFrom!.latitude},${booking.locationFrom!.longitude}"))) {
                             throw Exception('Could not launch');
                             }
                           },
