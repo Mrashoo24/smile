@@ -9,8 +9,8 @@ import 'package:smile/presentation/screens/authentication/loginscreen.dart';
 import 'package:smile/presentation/screens/bookinghistory/bookingh_history_screen.dart';
 
 class AuthController extends GetxController {
-  TextEditingController emailController = TextEditingController(text: "dhruv@gmail.com");
-  TextEditingController passwordController = TextEditingController(text: "123456");
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   Rxn<UserModel> userModel = Rxn<UserModel>();
   RxBool loading = false.obs;
