@@ -67,8 +67,8 @@ class BookingController extends GetxController {
 
 
   locations.sort((a, b) {
-  final distanceA = calculateDistance(targetLocation, a.toLocation!);
-  final distanceB = calculateDistance(targetLocation, b.toLocation!);
+  final distanceA = calculateDistance(targetLocation, a.jobcard  == "Pick Up" ? a.locationFrom : a.toLocation!);
+  final distanceB = calculateDistance(targetLocation,b.jobcard  == "Pick Up" ? b.locationFrom : b.toLocation!);
   return distanceA.compareTo(distanceB);
   });
 

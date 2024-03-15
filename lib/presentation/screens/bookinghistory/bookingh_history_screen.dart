@@ -241,10 +241,9 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
                           onTap: () async {
 
                            var curretnLocatiomn =  await controller.getCurrentLocation();
-
-                            if (!await launchUrl(Uri.parse("https://www.google.com/maps/dir/?api=1&origin=${curretnLocatiomn!.latitude},${curretnLocatiomn!.longitude}&destination=${booking.locationFrom!.latitude},${booking.locationFrom!.longitude}"))) {
-                            throw Exception('Could not launch');
-                            }
+                           if (!await launchUrl(Uri.parse("https://www.google.com/maps/dir/?api=1&origin=${curretnLocatiomn!.latitude},${curretnLocatiomn!.longitude}&destination=${booking.jobcard == "Pick Up" ? booking.locationFrom!.latitude : booking.toLocation!.latitude},${booking.jobcard == "Pick Up" ? booking.locationFrom!.longitude : booking.toLocation!.longitude}"))) {
+                             throw Exception('Could not launch');
+                           }
                           },
 
                             child: const Icon(Icons.location_on))
