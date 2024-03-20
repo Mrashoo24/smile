@@ -104,7 +104,7 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
                         buildDataText(
                             context, 'Booking ID', '${booking.id}'),
                         buildDataText(
-                            context, 'To Address:', '\n${booking.toAddress}'),
+                            context,booking.jobcard == 'Pick Up' ? 'From Address' : 'To Address:', '\n${booking.jobcard == 'Pick Up' ?booking.fromAddress : booking.toAddress}'),
                         const SizedBox(height: 10,)
                       ],
                     ),
@@ -242,7 +242,8 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
 
                            var curretnLocatiomn =  await controller.getCurrentLocation();
 
-                            if (!await launchUrl(Uri.parse("https://www.google.com/maps/dir/?api=1&origin=${curretnLocatiomn!.latitude},${curretnLocatiomn!.longitude}&destination=${booking.locationFrom!.latitude},${booking.locationFrom!.longitude}"))) {
+                           print("https://www.google.com/maps/dir/?api=1&origin=${curretnLocatiomn!.latitude},${curretnLocatiomn!.longitude}&destination=${booking.jobcard == "Pick Up" ? booking.locationFrom!.latitude : booking.toLocation!.latitude},${booking.jobcard == "Pick Up" ? booking.locationFrom!.longitude : booking.toLocation!.longitude}");
+                            if (!await launchUrl(Uri.parse("https://www.google.com/maps/dir/?api=1&origin=${curretnLocatiomn!.latitude},${curretnLocatiomn!.longitude}&destination=${booking.jobcard == "Pick Up" ? booking.locationFrom!.latitude : booking.toLocation!.latitude},${booking.jobcard == "Pick Up" ? booking.locationFrom!.longitude : booking.toLocation!.longitude}"))) {
                             throw Exception('Could not launch');
                             }
                           },

@@ -23,6 +23,7 @@ class BookingModel {
   String?  from_long ;
   String? to_lat ;
   String?  to_long ;
+  String? suburbs;
 
   BookingModel(
       {this.id,
@@ -42,7 +43,7 @@ class BookingModel {
         this.userid,
         this.duetime,
         this.pricing,
-        this.driver});
+        this.driver,this.suburbs,this.to_long,this.to_lat,this.from_long,this.from_lat});
 
   BookingModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -67,6 +68,7 @@ class BookingModel {
     from_long = json['from_long'];
     to_lat = json['to_lat'];
     to_long = json['to_long'];
+    suburbs = json['suburbs'];
   }
 
   Map<String, dynamic> toJson() {
@@ -94,6 +96,7 @@ class BookingModel {
     data['from_long'] = from_long;
     data['to_lat'] = to_lat;
     data['to_long'] = to_long;
+    data['suburbs'] = suburbs;
     return data;
   }
 

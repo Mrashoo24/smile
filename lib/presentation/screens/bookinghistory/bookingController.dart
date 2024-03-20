@@ -64,15 +64,35 @@ class BookingController extends GetxController {
   List<BookingModel> sortLocationsByDistance(List<BookingModel> locations, LocationModel targetLocation) {
 
 
+      var listOfSuburb = locations.map((e) => BookingModel(suburbs: e.suburbs,from_lat: e.from_lat,from_long: e.from_long,to_lat: e.to_lat,to_long: e.to_long,jobcard: e.jobcard)).toList().toSet().toList();
 
+      listOfSuburb.sort((a, b) {
 
-  locations.sort((a, b) {
-  final distanceA = calculateDistance(targetLocation, a.toLocation!);
-  final distanceB = calculateDistance(targetLocation, b.toLocation!);
-  return distanceA.compareTo(distanceB);
-  });
+        final distanceA = calculateDistance(targetLocation, a.jobcard == "Pick Up" ? a.locationFrom : a.toLocation!);
+        final distanceB = calculateDistance(targetLocation,b.jobcard == "Pick Up" ? b.locationFrom : b.toLocation!);
+        return distanceA.compareTo(distanceB);
+      });
 
-  return locations;
+      List<BookingModel> newList = [];
+
+      listOfSuburb.map((e) => e.suburbs).toSet().toList().forEach((element) {
+
+        List<BookingModel> listOfSuburbs =  locations.where((e) => e.suburbs == element).toList();
+
+        listOfSuburbs.sort((a, b) {
+
+          final distanceA = calculateDistance(targetLocation, a.jobcard == "Pick Up" ? a.locationFrom : a.toLocation!);
+          final distanceB = calculateDistance(targetLocation,b.jobcard == "Pick Up" ? b.locationFrom : b.toLocation!);
+          return distanceA.compareTo(distanceB);
+        });
+
+        newList.addAll(listOfSuburbs);
+
+      });
+
+      print(newList.map((e) => e.suburbs).toList());
+
+  return newList;
   }
 
 
@@ -157,7 +177,8 @@ class BookingController extends GetxController {
 
       var currentLocation = await getCurrentLocation();
 
-      bookingList.value =   sortLocationsByDistance(bookingListValue, currentLocation!);
+      bookingList.value =
+          sortLocationsByDistance(bookingListValue, currentLocation!);
 
       loading.value = false;
     }catch(e){

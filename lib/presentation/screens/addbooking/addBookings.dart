@@ -5,7 +5,7 @@ import 'package:smile/presentation/screens/bookinghistory/bookingh_history_scree
 
 import '../authentication/controllers/authcontroller.dart';
 import '../bookinghistory/bookingController.dart';
-
+import 'package:dropdown_search/dropdown_search.dart';
 class AddBooking extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -142,6 +142,7 @@ class _MyFormState extends State<MyForm> {
         style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
         onPressed: () async {
           if (_formKey.currentState!.validate()) {
+
            await  Future.forEach(allItems, (element) {
               ApiClient().addBooking(requestData: {
                 "parent_cmpny_id": 39,
@@ -165,6 +166,8 @@ class _MyFormState extends State<MyForm> {
                 "drivernote": ""
               });
             });
+
+           await  Future.delayed(Duration(seconds: 1));
 
            Get.offAll(BookingHistoryPage());
             // All fields are valid, submit the form
@@ -207,7 +210,46 @@ class _MyFormState extends State<MyForm> {
     if(controller.text.isEmpty){
       controller.text = items[0].replaceAll("\r\n", "").trim();;
     }
-    return DropdownButtonFormField(
+    return DropdownSearch<String>(
+      selectedItem: controller.text,
+      items: items,
+      popupProps: PopupPropsMultiSelection.menu(
+        showSelectedItems: true,
+        showSearchBox: true,
+
+      ),
+      onChanged: (selectedItems1) {
+        setState(() {
+          controller.text = selectedItems1.toString();
+          if(label == "Type"){
+            allItems.clear();
+          }
+        });
+        // Handle selected items here
+      },
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return '$label is required';
+        }
+        return null;
+      },
+      // dropdownSearchDecoration: InputDecoration(
+      //   border: InputBorder.none,
+      // ),
+      // showSelectedItem: true,
+      compareFn: (item, selectedItem) => item == selectedItem,
+      // label: "Select",
+      // itemAsString: ,
+      // popupItemBuilder: (context, item, isSelected) {
+      //   return ListTile(
+      //     title: Text(item),
+      //     trailing: isSelected ? Icon(Icons.check) : null,
+      //   );
+      // },
+    );
+
+
+      DropdownButtonFormField(
       decoration: InputDecoration(
         labelText: label,
         contentPadding: EdgeInsets.symmetric(vertical: 16.0), // Adjust the vertical padding as needed
@@ -319,7 +361,9 @@ class _MyFormState extends State<MyForm> {
     );
   }
 
-  Widget _buildMultiSelectDropdown(String label, List<String> selectedItems, List<String> allItems) {
+
+
+  Widget _buildMultiSelectDropdown(String label, List<String> selectedItems, List<String> allItems1) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -330,32 +374,36 @@ class _MyFormState extends State<MyForm> {
             borderRadius: BorderRadius.circular(5.0),
           ),
           padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-          child: DropdownButtonFormField(
-            isDense: true,
-            isExpanded: true,
-            items: allItems.map((item) {
-              return DropdownMenuItem(
-                value: item,
-                child: Text(item),
-              );
-            }).toList(),
-            onChanged: (value) {
-              setState(() {
-                if (selectedItems.contains(value)) {
-                  selectedItems.remove(value);
-                } else {
-                  selectedItems.add(value!);
-                }
-              });
-            },
-            value: selectedItems.isNotEmpty ? selectedItems[0] : null,
-            decoration: InputDecoration(
-              border: InputBorder.none,
+          child: DropdownSearch<String>.multiSelection(
+            items: allItems1,
+            popupProps: PopupPropsMultiSelection.menu(
+              showSelectedItems: true,
+              showSearchBox: true,
+
             ),
+            onChanged: (selectedItems1) {
+              print("selected Items = ${selectedItems1}");
+              setState(() {
+                allItems = selectedItems1;
+              });
+              // Handle selected items here
+            },
+            selectedItems: selectedItems,
+            // dropdownSearchDecoration: InputDecoration(
+            //   border: InputBorder.none,
+            // ),
+            // showSelectedItem: true,
+            compareFn: (item, selectedItem) => item == selectedItem,
+            // label: "Select",
+            // itemAsString: ,
+            // popupItemBuilder: (context, item, isSelected) {
+            //   return ListTile(
+            //     title: Text(item),
+            //     trailing: isSelected ? Icon(Icons.check) : null,
+            //   );
+            // },
           ),
         ),
-        SizedBox(height: 8.0),
-        Text("Selected Items: ${selectedItems.join(", ")}"),
       ],
     );
   }
