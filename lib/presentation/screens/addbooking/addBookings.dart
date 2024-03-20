@@ -163,7 +163,8 @@ class _MyFormState extends State<MyForm> {
                 "pricing": 0,
                 "driver": authController.userModel.value!.firstName,
                 "image": "",
-                "drivernote": ""
+                "drivernote": "",
+                "platform_type":"mobile"
               });
             });
 
