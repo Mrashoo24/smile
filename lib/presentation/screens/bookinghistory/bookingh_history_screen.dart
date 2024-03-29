@@ -201,18 +201,16 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
                                                       ],
                                                     ),
                                                   ),
+                                                  if(booking.jobcard == "Pick Up")
                                                   buildInkWell(
                                                       "Picked Up", booking),
-                                                  buildInkWell(
-                                                      "On The Way", booking),
+                                                  if(booking.jobcard != "Pick Up")
                                                   buildInkWell(
                                                       "Successfully Delivered",
                                                       booking),
                                                   buildInkWell(
                                                       "Cancelled", booking),
-                                                  buildInkWell(
-                                                      "Address not Found",
-                                                      booking),
+
 
                                                 ],
                                               ),

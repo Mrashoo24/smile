@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:smile/data/apiclient/apimanager.dart';
 import 'package:smile/presentation/screens/bookinghistory/bookingh_history_screen.dart';
 
@@ -45,8 +46,8 @@ class _MyFormState extends State<MyForm> {
   TextEditingController _toAddressCompanyController = TextEditingController();
   TextEditingController _jobCardController = TextEditingController(text: "Pick Up");
   TextEditingController _priorityController = TextEditingController();
-  TextEditingController _dateController = TextEditingController();
-  TextEditingController _timestampController = TextEditingController();
+  TextEditingController _dateController = TextEditingController(text:  DateFormat('yyyy-MM-dd').format(DateTime.now()));
+  TextEditingController _timestampController = TextEditingController(text:  DateFormat('hh:mm:ss').format(DateTime.now()));
   TextEditingController _companyNameController = TextEditingController();
   TextEditingController _notesController = TextEditingController();
   TextEditingController _statusController = TextEditingController();
@@ -119,7 +120,7 @@ class _MyFormState extends State<MyForm> {
         }
       ),
       SizedBox(height: 16),
-      _buildTextFieldMulti("Notes", _notesController),
+      _buildTextFieldMulti("Notes", _notesController,mandatory: false),
       //
       // _buildTextField("Parent Company ID", _parentCompanyController),
       // _buildTextField("Company ID", _companyController),
@@ -152,14 +153,14 @@ class _MyFormState extends State<MyForm> {
                 "jobcard": _jobCardController.text,
                 "priority": "",
                 "date": _dateController.text,
-                "timestampp":   "${_dateController.text.split(" ")[0]} ${_timestampController.text}",
+                "timestampp":   "${_dateController.text} ${_timestampController.text}",
                 "companyname": _jobCardController.text == "Pick Up" ? _toAddressController.text.split('-//-')[0] : _fromAddressController.text.split('-//-')[0],
                 "notes":_notesController.text,
                 "status":"BOOKING APPROVED",
                 "from_address": _jobCardController.text == "Pick Up" ? element.split('-//-')[1] : _toAddressController.text.split('-//-')[1],
                 "to_address":_jobCardController.text == "Pick Up" ?  _toAddressController.text.split('-//-')[1] :element.split('-//-')[1],
                 "userid": "39",
-                "duetime": "${_dateController.text.split(" ")[0]} ${_timestampController.text}",
+                "duetime": "${_dateController.text}  ${_timestampController.text}",
                 "pricing": 0,
                 "driver": authController.userModel.value!.firstName,
                 "image": "",
@@ -193,13 +194,14 @@ class _MyFormState extends State<MyForm> {
       },
     );
   }
-  Widget _buildTextFieldMulti(String label, TextEditingController controller) {
+  Widget _buildTextFieldMulti(String label, TextEditingController controller,
+      {bool mandatory = true}) {
     return TextFormField(
       controller: controller,
       decoration: InputDecoration(labelText: label),
       maxLines: 4,
       validator: (value) {
-        if (value!.isEmpty) {
+        if (value!.isEmpty && mandatory) {
           return '$label is required';
         }
         return null;
@@ -291,7 +293,7 @@ class _MyFormState extends State<MyForm> {
     );
     if (picked != null && picked != _dateController.text) {
       setState(() {
-        _dateController.text = picked.toString();
+        _dateController.text = DateFormat('yyyy-MMM-dd hh:mm:ss').format(picked);
       });
     }
   }
@@ -310,7 +312,7 @@ class _MyFormState extends State<MyForm> {
         picked.minute,
       );
       setState(() {
-        _timestampController.text =  _dateController.text.split(" ")[0].toString() + (" ${picked.hour}:${picked.minute}:00");
+        _timestampController.text =  DateFormat('hh:mm:ss').format(selectedTime);
       });
     }
   }
