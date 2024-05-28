@@ -6,12 +6,15 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get/get.dart';
 import 'package:smile/core/widgets.dart';
 import 'package:smile/data/models/bookingModel.dart';
+import 'package:smile/data/models/companyModel.dart';
 import 'package:smile/data/models/notesModel.dart';
 import 'package:smile/data/models/userModel.dart';
 
 import '../../core/errors/exceptions.dart';
 import '../../core/network_info.dart';
 import 'package:http/http.dart' as http;
+
+import '../models/addressModel.dart';
 
 class ApiClient extends GetConnect {
   var url = "https://smilecouriers.com.au/book/Driver";
@@ -230,7 +233,8 @@ class ApiClient extends GetConnect {
     }
   }
 
-  Future<List<String>> getCompanyAddres({
+
+  Future<List<Company>> getCompanyAddres({
     Map<String, String> headers = const {},
     Map requestData = const {},
   }) async {
@@ -243,11 +247,11 @@ class ApiClient extends GetConnect {
       );
       var response = jsonDecode(responseValue.body);
       if (response['status'] == 1 ) {
-        List<String> modelList = [];
+        List<Company> modelList = [];
 
         for (final Map<String, dynamic> i in response['message']) {
           // log('i : ' + i.toString());
-          modelList.add(i["companyname"].toString() + "-//- " + i["address"] );
+          modelList.add(Company.fromJson(i));
         }
         return modelList;
       } else {
@@ -263,7 +267,7 @@ class ApiClient extends GetConnect {
     }
   }
 
-  Future<List<String>> getLabsAddres({
+  Future<List<DentalLab>> getLabsAddres({
     Map<String, String> headers = const {},
     Map requestData = const {},
   }) async {
@@ -276,11 +280,11 @@ class ApiClient extends GetConnect {
       );
       var response = jsonDecode(responseValue.body);
       if (response['status'] == 1 ) {
-        List<String> modelList = [];
+        List<DentalLab> modelList = [];
 
         for (final Map<String, dynamic> i in response['message']) {
           // log('i : ' + i.toString());
-          modelList.add(i["labname"]+ "-//- " + i["labaddress"] );
+          modelList.add(DentalLab.fromJson(i));
         }
         return modelList;
       } else {
@@ -295,6 +299,72 @@ class ApiClient extends GetConnect {
       rethrow;
     }
   }
+
+  // Future<List<String>> getCompanyAddres({
+  //   Map<String, String> headers = const {},
+  //   Map requestData = const {},
+  // }) async {
+  //   await isNetworkConnected();
+  //
+  //   try {
+  //     http.Response responseValue = await http.get(
+  //       Uri.parse( '$url2/getCompanyProfileAddress'),
+  //       headers: headers,
+  //     );
+  //     var response = jsonDecode(responseValue.body);
+  //     if (response['status'] == 1 ) {
+  //       List<String> modelList = [];
+  //
+  //       for (final Map<String, dynamic> i in response['message']) {
+  //         // log('i : ' + i.toString());
+  //         modelList.add(i["companyname"].toString() + "-//- " + i["address"] );
+  //       }
+  //       return modelList;
+  //     } else {
+  //       throw response != null
+  //           ? response['message']
+  //           : 'Something Went Wrong!';
+  //     }
+  //   } catch (error) {
+  //
+  //     showErrorSnack("Error",error.toString());
+  //
+  //     rethrow;
+  //   }
+  // }
+
+  // Future<List<String>> getLabsAddres({
+  //   Map<String, String> headers = const {},
+  //   Map requestData = const {},
+  // }) async {
+  //   await isNetworkConnected();
+  //
+  //   try {
+  //     http.Response responseValue = await http.get(
+  //       Uri.parse( '$url2/getAddlabsAddress'),
+  //       headers: headers,
+  //     );
+  //     var response = jsonDecode(responseValue.body);
+  //     if (response['status'] == 1 ) {
+  //       List<String> modelList = [];
+  //
+  //       for (final Map<String, dynamic> i in response['message']) {
+  //         // log('i : ' + i.toString());
+  //         modelList.add(i["labname"]+ "-//- " + i["labaddress"] );
+  //       }
+  //       return modelList;
+  //     } else {
+  //       throw response != null
+  //           ? response['message']
+  //           : 'Something Went Wrong!';
+  //     }
+  //   } catch (error) {
+  //
+  //     showErrorSnack("Error",error.toString());
+  //
+  //     rethrow;
+  //   }
+  // }
 
 
   Future<bool> addBooking({

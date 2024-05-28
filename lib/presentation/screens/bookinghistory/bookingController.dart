@@ -160,27 +160,28 @@ class BookingController extends GetxController {
 
 
   getBookings() async {
+    loading.value = true;
+
+    var bookingListValue= await ApiClient().getBookings(headers: {"email":authController.userModel.value!.email!});
+
+    // List<BookingModel> bookingList1 = [];
+    // await Future.forEach(bookingListValue,(element) async {
+    //   var newValue = element;
+    //
+    //  LocationModel location =  await geoCodingTest(element.toAddress!.replaceAll("-//-", ""));
+    //
+    //   newValue.location = location;
+    //   bookingList1.add(newValue);
+    // });
+
+    var currentLocation = await getCurrentLocation();
+
+    bookingList.value =
+        sortLocationsByDistance(bookingListValue, currentLocation!);
+
+    loading.value = false;
     try{
-      loading.value = true;
 
-      var bookingListValue= await ApiClient().getBookings(headers: {"email":authController.userModel.value!.email!});
-
-      // List<BookingModel> bookingList1 = [];
-      // await Future.forEach(bookingListValue,(element) async {
-      //   var newValue = element;
-      //
-      //  LocationModel location =  await geoCodingTest(element.toAddress!.replaceAll("-//-", ""));
-      //
-      //   newValue.location = location;
-      //   bookingList1.add(newValue);
-      // });
-
-      var currentLocation = await getCurrentLocation();
-
-      bookingList.value =
-          sortLocationsByDistance(bookingListValue, currentLocation!);
-
-      loading.value = false;
     }catch(e){
       loading.value = false;
     }
