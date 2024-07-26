@@ -12,6 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../core/widgets.dart';
 import '../../../data/apiclient/apimanager.dart';
 import '../addbooking/addBookings.dart';
+import 'package:collection/collection.dart';
 
 class BookingHistoryPage extends StatefulWidget {
   const BookingHistoryPage({super.key});
@@ -118,11 +119,11 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
                     print("${booking.jobcard} ${booking.fromAddress} ${booking.id }");
 
                     if(booking.jobcard == 'Pick Up'){
-                      dentalLab = labAddress.firstWhere((element) => element.labName == booking.fromAddress);
-                      company = companyAddress.firstWhere((element) => element.companyName == booking.toAddress);
+                      dentalLab = labAddress.firstWhereOrNull((element) => element.labName == booking.fromAddress);
+                      company = companyAddress.firstWhereOrNull((element) => element.companyName == booking.toAddress);
                     }else{
-                      company = companyAddress.firstWhere((element) => element.companyName == booking.fromAddress);
-                      dentalLab = labAddress.firstWhere((element) => element.labName == booking.toAddress);
+                      company = companyAddress.firstWhereOrNull((element) => element.companyName == booking.toAddress);
+                      dentalLab = labAddress.firstWhereOrNull((element) => element.labName == booking.fromAddress);
 
                     }
 
