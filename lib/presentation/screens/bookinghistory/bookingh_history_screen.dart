@@ -122,8 +122,8 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
                       dentalLab = labAddress.firstWhereOrNull((element) => element.labName == booking.fromAddress);
                       company = companyAddress.firstWhereOrNull((element) => element.companyName == booking.toAddress);
                     }else{
-                      company = companyAddress.firstWhereOrNull((element) => element.companyName == booking.toAddress);
-                      dentalLab = labAddress.firstWhereOrNull((element) => element.labName == booking.fromAddress);
+                      company = companyAddress.firstWhereOrNull((element) => element.companyName == booking.fromAddress);
+                      dentalLab = labAddress.firstWhereOrNull((element) => element.labName == booking.toAddress);
 
                     }
 
@@ -135,7 +135,7 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
                             buildDataText(
                                 context, 'Booking ID', '${booking.id}'),
                             buildDataText(
-                                context,booking.jobcard == 'Pick Up' ? 'From Address' : 'To Address:', '\n${booking.jobcard == 'Pick Up' ? (dentalLab?.labAddress) ?? "" : company?.address ?? ""}'),
+                                context,booking.jobcard == 'Pick Up' ? 'From Address' : 'To Address:', '\n${booking.jobcard == 'Pick Up' ? (dentalLab?.labAddress) ?? "" : dentalLab?.labAddress ?? ""}'),
                             const SizedBox(height: 10,)
                           ],
                         ),
@@ -304,11 +304,11 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
                           ),
                           ListTile(
                             title: buildDataText(context, 'From Address',
-                                dentalLab?.labAddress ?? ""),
+                                (booking.jobcard == 'Pick Up' ? dentalLab?.labAddress : company?.address) ?? ""),
                           ),
                           ListTile(
                             title: buildDataText(context, 'To Address',
-                               company?.address ?? ""),
+                                (booking.jobcard == 'Pick Up' ?    company?.address  :dentalLab?.labAddress) ?? ""),
                           ),
                         ],
                       ),

@@ -186,10 +186,10 @@ class _MyFormState extends State<MyForm> {
                       "status": "OPEN",
                       "from_address": _jobCardController.text == "Pick Up"
                           ? element.split(' - ')[0]
-                          :element.split(' - ')[0] ,
+                          :_fromAddressController.text.split(' - ')[0] ,
                       "to_address": _jobCardController.text == "Pick Up"
                           ? _toAddressController.text.split(' - ')[0]
-                          : _fromAddressController.text.split(' - ')[0] ,
+                          : element.split(' - ')[0] ,
                       "userid": "39",
                       "duetime":
                           "${_dateController.text}  ${_timestampController.text}",
