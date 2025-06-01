@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "345463790066",
+    "project_id": "smilecouriers-9c2be",
+    "storage_bucket": "smilecouriers-9c2be.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:345463790066:android:f4f297796971d7352ff36b",
+        "android_client_info": {
+          "package_name": "com.ak.smilebookings.smile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgGj5XghAsuuMMATmmM8gpsIzCt54DGos"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
