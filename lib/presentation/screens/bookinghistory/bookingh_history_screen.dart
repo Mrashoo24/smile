@@ -270,7 +270,7 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
                               onTap: () async {
 
                                 var curretnLocatiomn =  await controller.getCurrentLocation();
-                                if (!await launchUrl(Uri.parse("https://maps.apple.com/?saddr=${curretnLocatiomn!.latitude},${curretnLocatiomn!.longitude}&daddr=${booking.jobcard == "Pick Up" ? booking.locationFrom!.latitude : booking.toLocation.latitude},${booking.jobcard == "Pick Up" ?booking.locationFrom.longitude : booking.toLocation.longitude}"))) {
+                                if (!await launchUrl(Uri.parse("https://www.google.com/maps/dir/?api=1&origin=${curretnLocatiomn!.latitude},${curretnLocatiomn!.longitude}&destination=${booking.jobcard == "Pick Up" ? booking.locationFrom!.latitude : booking.toLocation!.latitude},${booking.jobcard == "Pick Up" ? booking.locationFrom!.longitude : booking.toLocation!.longitude}"))) {
                                   throw Exception('Could not launch');
                                 }
                               },
