@@ -1,5 +1,10 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'dart:io';
+
+import 'package:get/get.dart';
+
+import '../presentation/screens/bookinghistory/bookingController.dart';
 
 /// Top-level function to handle background messages
 Future<void> firebaseBackgroundMessageHandler(RemoteMessage message) async {
@@ -22,14 +27,26 @@ class FirebaseService {
     } else {
       print('User declined or has not granted permission');
     }
-
-    // Get the FCM token
-    String? token = await _firebaseMessaging.getToken();
-    print('FCM Token: $token');
+    final iOSToken = await FirebaseMessaging.instance.getAPNSToken();
+    if (iOSToken == null) {
+      // Error
+      return;
+    }
 
     // Handle foreground messages
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Message received in foreground: ${message.notification?.title}');
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      // Show a frontend notification
+      Get.snackbar(
+        'Notification',
+        message.notification?.title ?? 'No title',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      var controller = Get.put(BookingController());
+
+      // Call the getBooking API
+      await controller.getBookings();
     });
 
     // Handle background messages

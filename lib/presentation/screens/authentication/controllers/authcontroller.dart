@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,8 +10,8 @@ import 'package:smile/presentation/screens/authentication/loginscreen.dart';
 import 'package:smile/presentation/screens/bookinghistory/bookingh_history_screen.dart';
 
 class AuthController extends GetxController {
-  TextEditingController emailController = TextEditingController(text: "dhruv@gmail.com");
-  TextEditingController passwordController = TextEditingController(text: "123456");
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   Rxn<UserModel> userModel = Rxn<UserModel>();
   RxBool loading = false.obs;
@@ -27,6 +28,10 @@ class AuthController extends GetxController {
 
 
       userModel.value = userModelValue;
+      // Get the FCM token
+
+
+
 
 
       loading.value = false;

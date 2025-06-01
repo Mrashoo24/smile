@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:smile/core/widgets.dart';
 import 'package:smile/data/models/bookingModel.dart';
@@ -56,7 +57,21 @@ class ApiClient extends GetConnect {
       );
       var response = jsonDecode(responseValue.body);
       if (response['status'] == 1 ) {
-        return UserModel.fromJson(response['data']);
+        final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+       var usermodel = UserModel.fromJson(response['data']);
+        String? token = await _firebaseMessaging.getToken();
+        print('FCM Token: $token');
+        http.Response fcmResponse = await http.post(
+          Uri.parse( '$url/apiFcmToken'),
+          headers: headers,
+          body: jsonEncode({
+          'fcm_token':token,
+          'driver_id': usermodel.id,
+          'driver_email':usermodel.email,
+          'driver_number':usermodel.mobileNo
+          }),
+        );
+        return usermodel;
       } else {
         throw response != null
             ? response['message']
